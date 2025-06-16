@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='UTF-8'>
+  <title>Blockchain Quest</title>
+  <link rel='stylesheet' href='style.css'>
+  <script src='https://cdn.tailwindcss.com'></script>
+</head>
+<body>
+
+    body {
+        font-family: 'Kanit', sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: #e6e6e6;
+        min-height: 100vh;
+    }
+    
+    .block {
+        background: rgba(30, 41, 59, 0.8);
+        border: 2px solid #4f46e5;
+        box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .block:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+    }
+    
+    .player {
+        transition: all 0.3s ease;
+    }
+    
+    .player:hover {
+        transform: scale(1.05);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+    }
+    
+    .card {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid #4f46e5;
+        box-shadow: 0 0 10px rgba(79, 70, 229, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+    }
+    
+    .dice {
+        transition: transform 0.6s ease;
+    }
+    
+    .dice.rolling {
+        animation: diceRoll 0.6s ease;
+    }
+    
+    @keyframes diceRoll {
+        0% { transform: rotateX(0) rotateY(0) rotateZ(0); }
+        25% { transform: rotateX(90deg) rotateY(180deg) rotateZ(45deg); }
+        50% { transform: rotateX(180deg) rotateY(90deg) rotateZ(90deg); }
+        75% { transform: rotateX(270deg) rotateY(270deg) rotateZ(135deg); }
+        100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+    }
+    
+    .blockchain-path {
+        background: linear-gradient(90deg, rgba(79, 70, 229, 0.2) 0%, rgba(79, 70, 229, 0.3) 100%);
+        position: relative;
+    }
+    
+    .blockchain-path::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #4f46e5;
+        z-index: 0;
+    }
+    
+    .hash-animation {
+        animation: hashPulse 2s infinite;
+    }
+    
+    @keyframes hashPulse {
+        0% { opacity: 0.7; }
+        50% { opacity: 1; }
+        100% { opacity: 0.7; }
+    }
+    
+    .modal {
+        background-color: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+    }
+    
+    .progress-bar {
+        transition: width 0.5s ease;
+    }
+</style>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="player card p-6 rounded-xl text-center cursor-pointer" data-player="miner">
+                <div class="bg-indigo-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">นักขุด (Miner)</h3>
+                <p class="text-gray-300">ผู้ที่ทำงานหนักเพื่อยืนยันธุรกรรมและสร้างบล็อกใหม่</p>
+                <div class="mt-4">
+                    <span class="inline-block bg-indigo-800 px-2 py-1 rounded text-sm mr-1">⛏️ พลังขุด +3</span>
+                    <span class="inline-block bg-indigo-800 px-2 py-1 rounded text-sm">🔒 ความปลอดภัย +1</span>
+                </div>
+            </div>
+            
+            <div class="player card p-6 rounded-xl text-center cursor-pointer" data-player="validator">
+                <div class="bg-purple-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">ผู้ตรวจสอบ (Validator)</h3>
+                <p class="text-gray-300">ผู้ที่ตรวจสอบความถูกต้องของธุรกรรมและบล็อก</p>
+                <div class="mt-4">
+                    <span class="inline-block bg-purple-800 px-2 py-1 rounded text-sm mr-1">🔍 การตรวจสอบ +3</span>
+                    <span class="inline-block bg-purple-800 px-2 py-1 rounded text-sm">💰 รางวัล +1</span>
+                </div>
+            </div>
+            
+            <div class="player card p-6 rounded-xl text-center cursor-pointer" data-player="developer">
+                <div class="bg-blue-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">นักพัฒนา (Developer)</h3>
+                <p class="text-gray-300">ผู้สร้างสมาร์ทคอนแทรคและแอปพลิเคชันบนบล็อกเชน</p>
+                <div class="mt-4">
+                    <span class="inline-block bg-blue-800 px-2 py-1 rounded text-sm mr-1">📝 สมาร์ทคอนแทรค +3</span>
+                    <span class="inline-block bg-blue-800 px-2 py-1 rounded text-sm">🔄 ความยืดหยุ่น +1</span>
+                </div>
+            </div>
+        </div>
+        
+        <button id="start-game" class="btn-primary px-8 py-3 rounded-full text-xl font-bold">เริ่มเกม</button>
+    </div>
+
+    <!-- Game Board Screen (Hidden initially) -->
+    <div id="game-board" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">BLOCKCHAIN QUEST</h1>
+                <p class="text-indigo-300">ผจญภัยในโลกบล็อกเชน</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="bg-indigo-900/50 px-4 py-2 rounded-lg">
+                    <span id="player-name" class="font-bold">นักขุด</span>
+                    <div class="flex items-center mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
+                        </svg>
+                        <span id="player-coins" class="ml-1">0</span>
+                    </div>
+                </div>
+                <div class="bg-indigo-900/50 px-4 py-2 rounded-lg">
+                    <span class="font-bold">รอบที่</span>
+                    <div class="text-center text-xl font-bold" id="current-round">1</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Progress -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-indigo-300">ความคืบหน้า</span>
+                <span id="progress-text" class="text-sm text-indigo-300">บล็อก 0/10</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-4">
+                <div id="progress-bar" class="progress-bar bg-gradient-to-r from-indigo-500 to-purple-600 h-4 rounded-full" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- Blockchain Path -->
+        <div class="blockchain-path p-6 rounded-xl mb-8">
+            <div class="flex justify-between items-center relative z-10 overflow-x-auto py-4" id="blockchain-blocks">
+                <!-- Genesis Block -->
+                <div class="block rounded-xl p-4 min-w-[150px] text-center mr-4 flex-shrink-0">
+                    <div class="text-xs text-indigo-300 mb-1">บล็อก #0</div>
+                    <div class="font-bold mb-2">Genesis Block</div>
+                    <div class="text-xs bg-indigo-900/50 p-1 rounded mb-1 overflow-hidden text-ellipsis">
+                        Hash: 000...abc
+                    </div>
+                    <div class="text-xs bg-indigo-900/50 p-1 rounded overflow-hidden text-ellipsis">
+                        Prev: 000...000
+                    </div>
+                </div>
+                
+                <!-- Blocks will be added here dynamically -->
+            </div>
+        </div>
+        
+        <!-- Game Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Dice Section -->
+            <div class="card rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">โยนลูกเต๋า</h3>
+                <div class="flex items-center justify-center mb-4">
+                    <div id="dice" class="dice bg-white text-gray-900 w-20 h-20 rounded-xl flex items-center justify-center text-4xl font-bold">?</div>
+                </div>
+                <button id="roll-dice" class="btn-primary w-full py-2 rounded-lg">โยนลูกเต๋า</button>
+            </div>
+            
+            <!-- Current Event -->
+            <div class="card rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">เหตุการณ์ปัจจุบัน</h3>
+                <div id="current-event" class="bg-indigo-900/50 p-4 rounded-lg min-h-[120px] flex items-center justify-center">
+                    <p class="text-center text-gray-400">โยนลูกเต๋าเพื่อเริ่มเกม</p>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="card rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">การกระทำ</h3>
+                <div id="actions" class="space-y-2">
+                    <button id="answer-question" class="btn-primary w-full py-2 rounded-lg mb-2 hidden">ตอบคำถาม</button>
+                    <button id="complete-mission" class="btn-primary w-full py-2 rounded-lg mb-2 hidden">ทำภารกิจ</button>
+                    <button id="end-turn" class="bg-gray-700 hover:bg-gray-600 w-full py-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>จบรอบ</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Log -->
+        <div class="card rounded-xl p-6">
+            <h3 class="text-xl font-bold mb-4">บันทึกเกม</h3>
+            <div id="game-log" class="bg-indigo-900/50 p-4 rounded-lg h-32 overflow-y-auto text-sm">
+                <div class="text-indigo-300">ยินดีต้อนรับสู่ BLOCKCHAIN QUEST! เริ่มเกมโดยการโยนลูกเต๋า</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<!-- Question Modal -->
+<div id="question-modal" class="modal fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full mx-4">
+        <h2 class="text-2xl font-bold mb-6 text-center">คำถามเกี่ยวกับบล็อกเชน</h2>
+        <div id="question-content" class="mb-6">
+            <!-- Question will be inserted here -->
+        </div>
+        <div id="question-options" class="space-y-3 mb-6">
+            <!-- Options will be inserted here -->
+        </div>
+        <div id="question-feedback" class="p-4 rounded-lg mb-6 hidden">
+            <!-- Feedback will be shown here -->
+        </div>
+        <div class="flex justify-end">
+            <button id="question-submit" class="btn-primary px-6 py-2 rounded-lg">ตอบคำถาม</button>
+            <button id="question-next" class="btn-primary px-6 py-2 rounded-lg hidden">ต่อไป</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mission Modal -->
+<div id="mission-modal" class="modal fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full mx-4">
+        <h2 class="text-2xl font-bold mb-6 text-center">ภารกิจบล็อกเชน</h2>
+        <div id="mission-content" class="mb-6">
+            <!-- Mission will be inserted here -->
+        </div>
+        <div id="mission-interaction" class="mb-6">
+            <!-- Interactive elements will be inserted here -->
+        </div>
+        <div id="mission-feedback" class="p-4 rounded-lg mb-6 hidden">
+            <!-- Feedback will be shown here -->
+        </div>
+        <div class="flex justify-end">
+            <button id="mission-submit" class="btn-primary px-6 py-2 rounded-lg">ส่งคำตอบ</button>
+            <button id="mission-next" class="btn-primary px-6 py-2 rounded-lg hidden">ต่อไป</button>
+        </div>
+    </div>
+</div>
+
+<!-- Game Over Modal -->
+<div id="game-over-modal" class="modal fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full mx-4 text-center">
+        <h2 class="text-3xl font-bold mb-4">เกมจบแล้ว!</h2>
+        <p id="game-result" class="text-xl mb-6">คุณได้สร้างบล็อกเชนสำเร็จ!</p>
+        <div class="mb-6">
+            <div class="text-lg font-bold mb-2">สรุปผล:</div>
+            <div class="grid grid-cols-2 gap-4 text-left">
+                <div>จำนวนบล็อก:</div>
+                <div id="result-blocks">10</div>
+                <div>เหรียญที่ได้:</div>
+                <div id="result-coins">25</div>
+                <div>สมาร์ทคอนแทรคที่สร้าง:</div>
+                <div id="result-contracts">3</div>
+            </div>
+        </div>
+        <button id="play-again" class="btn-primary px-8 py-3 rounded-full">เล่นอีกครั้ง</button>
+    </div>
+</div>
+
+
+<script src='script.js'></script>
+</body>
+</html>
